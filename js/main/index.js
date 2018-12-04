@@ -15,28 +15,68 @@ document.querySelector('#leftinformation span').firstChild.nodeValue = searchCoo
 document.querySelector('.nav-profile-text p').firstChild.nodeValue = searchCookie('name')
     //登出
 document.querySelectorAll('.userLogout').forEach((index) => {
-    index.addEventListener('click', () => {
-        axios({
-                method: "get",
-                baseURL: "http://192.168.0.108:8080/",
-                url: 'logout',
-            })
-            .then(response => {
-                console.log('response', response);
-                if (response.data.state == 1) {
+        index.addEventListener('click', () => {
+            axios({
+                    method: "get",
+                    baseURL: "http://192.168.0.117:8080/",
+                    url: 'logout',
+                })
+                .then(response => {
+                    console.log('response', response);
                     let keys = document.cookie.match(/[^ =;]+(?=\=)/g);
                     if (keys) {
                         for (let i = keys.length; i--;)
                             document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
                     }
-                    window.location.reload()
-                } else {
-                    alert('服务器异常');
-                    window.location.reload()
-                }
-            })
-            .catch(error => {
-                console.log(`err:${error}`);
-            });
+                    // window.location.reload()
+
+                })
+                .catch(error => {
+                    alert('服务器异常')
+                    console.log(`err:${error}`);
+                });
+        })
     })
-})
+    //异步模块加载
+let dominject = document.querySelector('.content-wrapper')
+
+
+function Modularization(dom, script) {
+    console.log(dom, script);
+    let doms = dom || 'index'
+    axios({
+        method: "get",
+        baseURL: "../../components",
+        url: `${doms}.html`
+    }).then((response) => {
+        // //重载css依赖
+        // let link = document.createElement('link')
+        // link.href = 'css/style.css'
+        // link.rel = 'stylesheet'
+        // Array.prototype.slice.call(document.getElementsByTagName('link')).forEach(element => {
+        //     if (element.href == link.href) {
+        //         console.log(element);
+        //         document.head.removeChild(element)
+        //     }
+        // });
+        // document.head.appendChild(link)
+        //重载相关js依赖
+        if (script != undefined) {
+            let scr = document.createElement('script')
+            scr.src = script
+
+            Array.prototype.slice.call(document.getElementsByTagName('script')).forEach(element => {
+                if (element.src == scr.src) {
+                    console.log(element);
+                    document.body.removeChild(element)
+                }
+            });
+            document.body.appendChild(scr)
+        }
+        return response
+    }).then((response) => {
+        dominject.innerHTML = response.data
+    }).catch(error => {
+        console.log(`err:${error}`);
+    })
+}

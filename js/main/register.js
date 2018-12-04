@@ -26,7 +26,7 @@ document.querySelector('#registerButton').addEventListener('click', () => {
         }) && select.value != '小组') {
         axios({
                 method: "post",
-                baseURL: "http://192.168.0.108:8080/",
+                baseURL: "http://192.168.0.107:8080/",
                 url: "user/regist",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,3 +1,7 @@
 .form-check .form-check-label a {
     display: inline-block;
 }
+
+.form-check {
+    display: inline-block;
+}
