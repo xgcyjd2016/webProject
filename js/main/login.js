@@ -32,7 +32,7 @@ document.querySelector('#loginInputButton').addEventListener('click', () => {
         checkbox.checked ? url = 'uanager/login' : url = 'user/login'
         axios({
                 method: "post",
-                baseURL: "http://192.168.0.117:8080/",
+                baseURL: "http://192.168.0.121:8080/SpringMyBatis-1.0-SNAPSHOT",
                 url: url,
                 headers: {
                     "Content-Type": "application/json"

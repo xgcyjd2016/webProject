@@ -18,7 +18,7 @@ document.querySelectorAll('.userLogout').forEach((index) => {
         index.addEventListener('click', () => {
             axios({
                     method: "get",
-                    baseURL: "http://192.168.0.117:8080/",
+                    baseURL: "http://192.168.0.121:8080/SpringMyBatis-1.0-SNAPSHOT",
                     url: 'logout',
                 })
                 .then(response => {
@@ -28,7 +28,7 @@ document.querySelectorAll('.userLogout').forEach((index) => {
                         for (let i = keys.length; i--;)
                             document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
                     }
-                    // window.location.reload()
+                    window.location.reload()
 
                 })
                 .catch(error => {

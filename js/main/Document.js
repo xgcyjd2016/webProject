@@ -25,16 +25,14 @@ var arrJava = []
 function loadUsers() {
     axios({
         method: "get",
-        baseURL: "http://192.168.0.117:8080/",
+        baseURL: "http://192.168.0.121:8080/SpringMyBatis-1.0-SNAPSHOT",
         url: 'getAll',
         headers: {
             "Content-Type": "application/json"
         }
     }).then(response => {
-        Array.prototype.slice.call(response.data.managerList).forEach((ele) => {
-            ele.group_id == 1 ? arrJava.push(ele.stu_id) : arrWeb.push(ele.stu_id)
-        })
-        Array.prototype.slice.call(response.data.userList).forEach((ele) => {
+        console.log('response', response);
+        Array.prototype.slice.call(response.data.user).forEach((ele) => {
             ele.group_id == 1 ? arrJava.push(ele.stu_id) : arrWeb.push(ele.stu_id)
         })
     })
@@ -49,7 +47,7 @@ function markdownCommit(state) {
     let receivers;
     let WebChecked = document.querySelector('.web').checked
     let JavaChecked = document.querySelector('.java').checked
-    if (searchCookie('stu_id') == undefined) {
+    if (!searchCookie('stu_id')) {
         alert('你还没有登录,请登录后操作')
         return;
     }
@@ -65,13 +63,6 @@ function markdownCommit(state) {
         alert('请选择群发用户')
         return;
     }
-    if (group == 1) {
-        var index = arrJava.indexOf(Number(author));
-        arrJava.splice(index, 1)
-    } else if (group == 2) {
-        var index = arrWeb.indexOf(Number(author));
-        arrWeb.splice(index, 1)
-    }
     if (WebChecked && !JavaChecked) {
         receivers = arrWeb.join('|')
     }
@@ -83,7 +74,7 @@ function markdownCommit(state) {
     }
     axios({
             method: "post",
-            baseURL: "http://192.168.0.117:8080/",
+            baseURL: "http://192.168.0.121:8080/SpringMyBatis-1.0-SNAPSHOT",
             url: 'addArchivesDetail',
             headers: {
                 "Content-Type": "application/json"
@@ -93,12 +84,13 @@ function markdownCommit(state) {
                 title: title,
                 content: value,
                 state: state,
-                receiver: receivers
+                receiver: receivers,
+                date: new Date().toDateString()
             }
         })
         .then(response => {
             // console.log('response', response);
-            alert('提交成功')
+            alert('SUCCESSFUL')
         }).catch(error => {
             console.log(`err:${error}`);
             alert('提交失败')
@@ -110,3 +102,32 @@ document.querySelector('#save').addEventListener('click', () => {
 document.querySelector('#upload').addEventListener('click', () => {
     markdownCommit(1)
 })
+document.querySelector('#tijiaobutton').addEventListener('click', () => {
+    axios({
+            method: "get",
+            baseURL: "http://192.168.0.121:8080/SpringMyBatis-1.0-SNAPSHOT",
+            url: 'findArchivesDetailByAuthor',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            params: {
+                author: Number(searchCookie('stu_id')),
+                pageNow: 1
+            }
+        })
+        .then(response => {
+            console.log('responsesss', response);
+        }).catch(error => {
+            console.log(`erssssr:${error}`);
+        })
+})
+
+//my_article
+
+function showArticle(ArchivesDetail, page) {
+    let tr = document.createElement('tr');
+    let td = document.createElement('td');
+    ArchivesDetail.forEach((data, index, arr) => {
+        // let index = data.index
+    })
+}
